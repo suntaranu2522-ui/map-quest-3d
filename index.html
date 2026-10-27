@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MISSION: แผนที่พิชิตโลก</title>
+<style>
+:root{--bg1:#1a0b3d;--bg2:#0d2a6b;--gold:#ffd23f;--sky:#5ad1ff;--card:rgba(255,255,255,.1);--tx:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{color-scheme:dark}
+body{margin:0;min-height:100vh;font-family:'Noto Sans Thai','Sarabun',system-ui,sans-serif;color:var(--tx);background:radial-gradient(circle at 50% 0,var(--bg2),var(--bg1) 70%);font-size:18px}
+main{max-width:760px;margin:auto;padding:16px;text-align:center}
+section{display:none}section.on{display:block}
+h1{font-size:2rem;margin:.3em 0;color:var(--gold);text-shadow:0 3px 0 #7a4b00,0 0 20px #ffd23f66}
+h2{color:var(--gold)}
+.btn{display:block;width:100%;max-width:420px;margin:10px auto;padding:14px;border:0;border-radius:16px;font:inherit;font-weight:700;color:#2b1700;background:linear-gradient(#ffe27a,#ffb300);box-shadow:0 5px 0 #8a5a00;cursor:pointer}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #8a5a00}
+.btn.alt{background:linear-gradient(#8fe0ff,#2a8fe0);color:#001a33;box-shadow:0 5px 0 #0b4a85}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.globe{width:180px;height:180px;margin:14px auto;border-radius:50%;position:relative;overflow:hidden;background:radial-gradient(circle at 30% 30%,#8fe9ff,#1565c0 55%,#0a1f5c);box-shadow:inset -20px -20px 40px #0008,0 0 40px #5ad1ff99;animation:glow 3s infinite alternate}
+.globe:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 24px,#ffffff55 24px 26px),repeating-linear-gradient(0deg,transparent 0 24px,#ffd23f66 24px 26px);animation:spin 6s linear infinite;background-size:52px 100%,100% 26px}
+@keyframes spin{to{background-position:52px 0,0 0}}@keyframes glow{to{box-shadow:inset -20px -20px 40px #0008,0 0 70px #ffd23f88}}
+.chars{font-size:2.4rem}.note{font-size:.8rem;opacity:.7}
+input{width:100%;max-width:420px;padding:12px;border-radius:12px;border:2px solid var(--sky);font:inherit;margin:6px 0;background:#fff;color:#111}
+.card{background:var(--card);border:1px solid #fff3;border-radius:18px;padding:14px;margin:12px 0;text-align:left;backdrop-filter:blur(4px)}
+.hud{display:flex;justify-content:space-around;flex-wrap:wrap;gap:6px;font-weight:700;background:#0005;border-radius:14px;padding:8px;margin-bottom:10px}
+.isl{display:flex;align-items:center;gap:12px;width:100%;margin:10px 0;padding:14px;border-radius:18px;border:2px solid var(--sky);background:linear-gradient(135deg,#3b1a8a,#14509e);color:#fff;font:inherit;text-align:left;cursor:pointer}
+.isl.lock{opacity:.45;border-style:dashed;cursor:not-allowed}.isl.ok{border-color:var(--gold)}
+.isl b{font-size:1.5rem}
+.opt{display:block;width:100%;margin:8px 0;padding:12px;border-radius:14px;border:2px solid #fff4;background:#ffffff14;color:#fff;font:inherit;text-align:left;cursor:pointer}
+.opt.sel{border-color:var(--gold);background:#ffd23f33}
+.fb{border-radius:14px;padding:12px;margin:10px 0;text-align:left}.good{background:#1f8a4c88}.bad{background:#b3382c88}.hint{background:#8a6d0088}
+.bar{height:12px;border-radius:8px;background:#fff3;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--sky),var(--gold));transition:width .4s}
+table.g{border-collapse:collapse;margin:10px auto}table.g td{padding:2px}
+.cell{width:46px;height:46px;border-radius:50%;border:2px solid var(--sky);background:#0a1f5c;color:#fff;font-size:.6rem;cursor:pointer}
+.cell.sel{background:var(--gold);color:#000}.ax{font-size:.75rem;color:var(--sky)}
+.chest{font-size:5rem;animation:pop 1s infinite alternate}@keyframes pop{to{transform:scale(1.2) rotate(6deg)}}
+.row{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid #fff2}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body><main>
+
+<section id="home" class="on">
+<h1>MISSION: แผนที่พิชิตโลก</h1>
+<p>“4 ด่าน 1 ภารกิจใหญ่ พิชิตโลกด้วยพลังแห่งภูมิศาสตร์!”</p>
+<div class="globe"></div>
+<div class="chars">🧑‍🚀 🤖 👩‍🚀 🧭 🏝️ 💰</div>
+<button class="btn" onclick="go('setup')">เริ่มภารกิจ</button>
+<button class="btn alt" onclick="go('how')">วิธีเล่น</button>
+<button class="btn alt" onclick="go('learn')">เรียนรู้ก่อนเล่น</button>
+<button class="btn alt" id="snd" onclick="toggleSnd()">🔊 เสียง: เปิด</button>
+<p class="note">ภาพลูกโลกเป็นภาพลวงตา 3 มิติด้วย CSS ไม่ใช่โมเดล 3 มิติจริง</p>
+</section>
+
+<section id="how"><h2>วิธีเล่น</h2>
+<div class="card">🏝️ ผ่าน 4 เกาะตามลำดับ แต่ละด่านต้องได้ ≥ 70% ของคะแนนด่านจึงปลดล็อกด่านถัดไป<br>✏️ เลือกคำตอบแล้วกด “ส่งคำตอบ” ตอบผิดมีคำใบ้และลองใหม่ได้ (รวม 2 ครั้ง)<br>⭐ ถูกครั้งแรกได้คะแนนเต็ม ถูกครั้งที่ 2 ได้ครึ่งหนึ่ง<br>💡 มีปุ่มคำใบ้ 2 ครั้งต่อด่าน<br>🧩 ผ่านครบ 4 ด่านเพื่อเปิดภารกิจสุดท้าย<br>🧑‍🤝‍🧑 โหมดทีม: ผลัดกันเป็นนักอ่านแผนที่ นักวิเคราะห์ นักแก้ปริศนาพิกัด ผู้บันทึก และผู้นำเสนอเหตุผล</div>
+<button class="btn" onclick="go('home')">กลับหน้าหลัก</button></section>
+
+<section id="learn"><h2>เรียนรู้ก่อนเล่น</h2>
+<div class="card">🗺️ <b>ประเภทแผนที่:</b> กายภาพ (ภูมิประเทศสูงต่ำ) · รัฐกิจ (เขตแดนการปกครอง) · เฉพาะเรื่อง (ประชากร ฝน ฯลฯ) · ภูมิประเทศ (เส้นชั้นความสูง) · ถนน (การเดินทาง)<br><br>🧭 <b>องค์ประกอบ:</b> ชื่อแผนที่ ทิศ มาตราส่วน สัญลักษณ์ คำอธิบายสัญลักษณ์ พิกัด/กริด แหล่งที่มา<br><br>📏 <b>มาตราส่วน 1:100,000</b> → 1 ซม. บนแผนที่ = 1 กม. จริง<br><br>↔️ <b>ละติจูด</b> บอกเหนือ–ใต้ของเส้นศูนย์สูตร (0°–90°)<br>↕️ <b>ลองจิจูด</b> บอกตะวันออก–ตะวันตกของเส้นเมริเดียนแรก (0°–180°)</div>
+<button class="btn" onclick="go('home')">กลับหน้าหลัก</button></section>
+
+<section id="setup"><h2>ตั้งค่าทีม</h2>
+<input id="team" placeholder="ชื่อทีม" maxlength="30">
+<input id="members" placeholder="ชื่อผู้เล่น / ชื่อกลุ่ม" maxlength="60">
+<button class="btn alt" id="modeBtn" onclick="toggleMode()">โหมด: SOLO EXPLORER (รายบุคคล)</button>
+<button class="btn" onclick="startGame()">เริ่มออกเดินทาง</button>
+<button class="btn alt" onclick="go('home')">กลับ</button></section>
+
+<section id="map"><div class="hud" id="hud"></div><h2>แผนที่เกาะภารกิจ</h2><div id="isl"></div><p class="note">คะแนนอยู่ในหน่วยความจำของหน้านี้เท่านั้น หากรีเฟรชหน้าจะเริ่มใหม่</p></section>
+
+<section id="quiz"><div class="hud" id="qhud"></div><div class="bar"><i id="qbar"></i></div><div class="card" id="qbox"></div><div id="fb"></div><div id="qbtns"></div></section>
+
+<section id="stagedone"><div id="sdbox"></div></section>
+
+<section id="result"><div id="rbox"></div></section>
+
+</main>
+<script>
+const ST=[{n:"เกาะจำแนกประเภทแผนที่",i:"🏝️",max:20},{n:"นักสืบองค์ประกอบแผนที่",i:"🔍",max:25},{n:"ห้องทดลองละติจูด",i:"↔️",max:20},{n:"ปริศนาลองจิจูด",i:"↕️",max:25},{n:"ขุมทรัพย์พิกัดโลก",i:"💰",max:10}];
+const T=["แผนที่กายภาพ","แผนที่รัฐกิจ","แผนที่เฉพาะเรื่อง","แผนที่ภูมิประเทศ","แผนที่ถนน"];
+// คลังคำถาม: s=ด่าน, q=โจทย์, o=ตัวเลือก, a=คำตอบ, h=คำใบ้, e=คำอธิบาย, d=ความยาก
+const Q=[
+{id:"1-1",s:0,d:"ง่าย",q:"ต้องการศึกษาพื้นที่ภูเขาและที่ราบ ควรใช้แผนที่ชนิดใด",o:[T[0],T[1],T[2],T[4]],a:T[0],h:"มองหาแผนที่ที่เน้นความสูงต่ำของพื้นผิวโลก",e:"แผนที่กายภาพแสดงลักษณะภูมิประเทศ เช่น ภูเขา ที่ราบ แม่น้ำ"},
+{id:"1-2",s:0,d:"ง่าย",q:"ต้องการเปรียบเทียบจำนวนประชากรแต่ละจังหวัด ควรใช้แผนที่ชนิดใด",o:[T[0],T[1],T[2],T[4]],a:T[2],h:"ข้อมูลเฉพาะหัวข้อ เช่น ประชากร จัดเป็นแผนที่ประเภทใด",e:"แผนที่เฉพาะเรื่องแสดงข้อมูลเฉพาะหัวข้อ เช่น ประชากร ปริมาณฝน"},
+{id:"1-3",s:0,d:"ง่าย",q:"ต้องการวางแผนเดินทางโดยรถยนต์ ควรใช้แผนที่ชนิดใด",o:[T[0],T[1],T[2],T[4]],a:T[4],h:"คิดถึงสิ่งที่ใช้นำทางไปยังจุดหมาย",e:"แผนที่ถนนหรือแผนที่เส้นทางแสดงถนนและจุดหมายเพื่อการเดินทาง"},
+{id:"1-4",s:0,d:"ปานกลาง",q:"สถานการณ์: ผู้ช่วยต้องการศึกษาพรมแดนระหว่างประเทศ ควรเลือกแผนที่ชนิดใด",o:[T[0],T[1],T[2],T[4]],a:T[1],h:"เขตแดนการปกครองเป็นจุดเด่นของแผนที่ชนิดนี้",e:"แผนที่รัฐกิจแสดงเขตแดนการปกครอง เช่น ประเทศ จังหวัด เมืองหลวง"},
+{id:"1-5",s:0,d:"ยาก",q:"แผนที่ที่ใช้เส้นชั้นความสูงแสดงรายละเอียดภูมิประเทศ ลำน้ำ และเส้นทาง คือแผนที่ชนิดใด",o:[T[3],T[1],T[2],T[4]],a:T[3],h:"ชื่อของแผนที่นี้ตรงกับลักษณะที่ปรากฏบนแผนที่",e:"แผนที่ภูมิประเทศแสดงรายละเอียดพื้นที่ เช่น เส้นชั้นความสูง ลำน้ำ และเส้นทาง"},
+{id:"2-1",s:1,d:"ง่าย",q:"องค์ประกอบใดบอกความหมายของสัญลักษณ์ที่ใช้บนแผนที่",o:["ชื่อแผนที่","คำอธิบายสัญลักษณ์","มาตราส่วน","แหล่งที่มา"],a:"คำอธิบายสัญลักษณ์",h:"สัญลักษณ์แต่ละแผนที่อาจต่างกัน จึงต้องมีตัวอธิบาย",e:"สัญลักษณ์อาจต่างกันในแต่ละแผนที่ จึงต้องอ่านคำอธิบายสัญลักษณ์ของแผนที่นั้น"},
+{id:"2-2",s:1,d:"ปานกลาง",pt:15,q:"แผนที่มาตราส่วน 1:100,000 วัดระยะบนแผนที่ได้ 3 ซม. ระยะจริงกี่กิโลเมตร",o:["0.3 กม.","3 กม.","30 กม.","300 กม."],a:"3 กม.",h:"1 ซม. บนแผนที่ = 100,000 ซม. จริง และ 100,000 ซม. = 1 กม.",e:"3 × 100,000 = 300,000 ซม. = 3,000 ม. = 3 กม."},
+{id:"2-3",s:1,d:"ง่าย",q:"บนแผนที่ที่ทิศเหนืออยู่ด้านบน โรงเรียนอยู่ทางซ้ายของตลาด โรงเรียนอยู่ทิศใดของตลาด",o:["ทิศเหนือ","ทิศใต้","ทิศตะวันออก","ทิศตะวันตก"],a:"ทิศตะวันตก",h:"ถ้าเหนืออยู่บน ตะวันออกจะอยู่ด้านขวา",e:"เมื่อเหนืออยู่ด้านบน ซ้ายคือตะวันตก ขวาคือตะวันออก"},
+{id:"2-4",s:1,d:"ยาก",pt:15,q:"แผนที่มาตราส่วน 1:50,000 วัดระยะบนแผนที่ได้ 6 ซม. ระยะจริงกี่กิโลเมตร",o:["1.5 กม.","3 กม.","6 กม.","30 กม."],a:"3 กม.",h:"1 ซม. = 50,000 ซม. = 0.5 กม.",e:"6 × 50,000 = 300,000 ซม. = 3 กม."},
+{id:"2-5",s:1,d:"ปานกลาง",pt:5,q:"ถ้าแผนที่ไม่มีมาตราส่วน จะเกิดปัญหาใดมากที่สุด",o:["ไม่รู้ชื่อแผนที่","ประมาณระยะทางจริงไม่ได้","มองไม่เห็นภูเขา","ไม่รู้ว่าเป็นแผนที่"],a:"ประมาณระยะทางจริงไม่ได้",h:"มาตราส่วนเกี่ยวกับการเปรียบเทียบระยะ",e:"มาตราส่วนใช้เทียบระยะบนแผนที่กับระยะจริง"},
+{id:"3-1",s:2,d:"ง่าย",q:"เส้นศูนย์สูตรมีค่าละติจูดเท่าใด",o:["0°","30°","60°","90°"],a:"0°",h:"เป็นเส้นเริ่มต้นของการวัดละติจูด",e:"เส้นศูนย์สูตรคือละติจูด 0° แบ่งโลกเป็นซีกเหนือและซีกใต้"},
+{id:"3-2",s:2,d:"ง่าย",q:"สถานที่ที่ละติจูด 25°N อยู่ทางใดของเส้นศูนย์สูตร และห่างกี่องศา",o:["เหนือ 25°","ใต้ 25°","ตะวันออก 25°","ตะวันตก 25°"],a:"เหนือ 25°",h:"N ย่อมาจาก North",e:"N คือเหนือ ค่า 25° คือมุมที่ห่างจากเส้นศูนย์สูตร"},
+{id:"3-3",s:2,d:"ปานกลาง",q:"ละติจูดมีค่าสูงสุดกี่องศา",o:["45°","90°","180°","360°"],a:"90°",h:"ค่าสูงสุดอยู่ที่ขั้วโลก",e:"ละติจูดมีค่า 0°–90° เหนือหรือใต้ ขั้วโลกคือ 90°"},
+{id:"3-4",s:2,d:"ยาก",q:"ทำไมละติจูดเพียงค่าเดียวจึงระบุตำแหน่งเฉพาะเจาะจงไม่ได้",o:["เพราะละติจูดเป็นวงกลมขนานที่มีหลายจุดบนเส้นเดียวกัน","เพราะละติจูดมีค่าเดียวทั้งโลก","เพราะละติจูดใช้ได้เฉพาะซีกใต้","เพราะละติจูดเป็นเส้นตรง"],a:"เพราะละติจูดเป็นวงกลมขนานที่มีหลายจุดบนเส้นเดียวกัน",h:"ลองนึกถึงวงกลมรอบโลก มีกี่จุดบนวงนั้น",e:"ทุกจุดบนวงกลมละติจูดเดียวกันมีค่าละติจูดเท่ากัน จึงต้องใช้ลองจิจูดร่วมด้วย"},
+{id:"4-1",s:3,d:"ง่าย",q:"เส้นเมริเดียนแรกมีค่าลองจิจูดเท่าใด",o:["0°","90°E","90°W","180°"],a:"0°",h:"เป็นเส้นเริ่มต้นของการวัดลองจิจูด",e:"เส้นเมริเดียนแรกมีค่า 0°"},
+{id:"4-2",s:3,d:"ง่าย",q:"ลองจิจูด 60°W อยู่ทางใดของเส้นเมริเดียนแรก",o:["ตะวันออก","ตะวันตก","เหนือ","ใต้"],a:"ตะวันตก",h:"W ย่อมาจาก West",e:"W คือตะวันตก E คือตะวันออก"},
+{id:"4-3",s:3,d:"ปานกลาง",q:"เส้นเมริเดียนเชื่อมระหว่างจุดใด",o:["ขั้วโลกเหนือกับขั้วโลกใต้","เส้นศูนย์สูตรกับขั้วเหนือ","ตะวันออกกับตะวันตกเท่านั้น","ทวีปกับทวีป"],a:"ขั้วโลกเหนือกับขั้วโลกใต้",h:"เส้นเหล่านี้บรรจบกันที่ปลายสุดของโลก",e:"เส้นเมริเดียนเชื่อมขั้วเหนือกับขั้วใต้ และบรรจบกันที่ขั้ว"},
+{id:"4-4",s:3,d:"ยาก",pt:10,type:"grid",q:"ค้นหาสมบัติ: แตะจุดตัดที่พิกัด 20°N, 100°E บนแผนที่กริด",a:"20,100",h:"หาแถวละติจูด 20°N ก่อน แล้วหาคอลัมน์ลองจิจูด 100°E",e:"จุดตัดของละติจูด 20°N กับลองจิจูด 100°E คือคำตอบ (เป็นโจทย์ฝึกกริด)"},
+{id:"4-5",s:3,d:"ปานกลาง",pt:5,q:"ข้อใดอธิบายความแตกต่างของละติจูดกับลองจิจูดได้ถูกต้อง",o:["ละติจูดบอกเหนือ–ใต้ ลองจิจูดบอกตะวันออก–ตะวันตก","ละติจูดบอกตะวันออก–ตะวันตก ลองจิจูดบอกเหนือ–ใต้","ทั้งสองบอกความสูงจากระดับน้ำทะเล","ทั้งสองบอกทิศเหนืออย่างเดียว"],a:"ละติจูดบอกเหนือ–ใต้ ลองจิจูดบอกตะวันออก–ตะวันตก",h:"ละติจูดอ้างอิงเส้นศูนย์สูตร ลองจิจูดอ้างอิงเมริเดียนแรก",e:"ต้องใช้ทั้งสองค่าร่วมกันจึงระบุตำแหน่งเฉพาะเจาะจงได้"},
+{id:"F-1",s:4,d:"ปานกลาง",q:"ขั้นที่ 1: วางแผนเส้นทางช่วยเหลือผู้ประสบภัย ควรเลือกแผนที่ชนิดใด",o:[T[0],T[1],T[2],T[4]],a:T[4],h:"ต้องเห็นถนนและเส้นทาง",e:"แผนที่ถนนแสดงเส้นทางเพื่อการเดินทาง"},
+{id:"F-2",s:4,d:"ปานกลาง",q:"ขั้นที่ 2: ต้องการหาโรงพยาบาลบนแผนที่ ควรดูองค์ประกอบใด",o:["ชื่อแผนที่","คำอธิบายสัญลักษณ์","ปีที่จัดทำ","ทิศ"],a:"คำอธิบายสัญลักษณ์",h:"องค์ประกอบที่บอกว่าสัญลักษณ์แต่ละอันหมายถึงอะไร",e:"คำอธิบายสัญลักษณ์บอกว่าสัญลักษณ์ใดแทนโรงพยาบาล"},
+{id:"F-3",s:4,d:"ง่าย",q:"ขั้นที่ 3: จุดหมายอยู่ที่ละติจูด 15°S อยู่ทางใดของเส้นศูนย์สูตร",o:["เหนือ","ใต้","ตะวันออก","ตะวันตก"],a:"ใต้",h:"S ย่อมาจาก South",e:"S คือใต้ของเส้นศูนย์สูตร"},
+{id:"F-4",s:4,d:"ง่าย",q:"ขั้นที่ 4: ลองจิจูด 30°E อยู่ทางใดของเส้นเมริเดียนแรก",o:["ตะวันออก","ตะวันตก","เหนือ","ใต้"],a:"ตะวันออก",h:"E ย่อมาจาก East",e:"E คือตะวันออกของเมริเดียนแรก"},
+{id:"F-5",s:4,d:"ยาก",type:"grid",q:"ขั้นที่ 5: ทีมกู้ภัยต้องไปที่พิกัด 30°N, 110°E แตะจุดตัดบนกริด",a:"30,110",h:"ใช้ละติจูดหาแถว ใช้ลองจิจูดหาคอลัมน์",e:"จุดตัดของ 30°N กับ 110°E คือจุดหมาย"}
+];
+let S,snd=true,mode="solo",ac;
+function $(i){return document.getElementById(i)}
+function go(id){document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===id));scrollTo(0,0)}
+function beep(f,d){if(!snd)return;try{ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=.08;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function toggleSnd(){snd=!snd;$('snd').textContent='🔊 เสียง: '+(snd?'เปิด':'ปิด')}
+function toggleMode(){mode=mode==='solo'?'team':'solo';$('modeBtn').textContent='โหมด: '+(mode==='solo'?'SOLO EXPLORER (รายบุคคล)':'TEAM ADVENTURE (ทีม)')}
+function startGame(){const t=$('team').value.trim()||'ทีมนักสำรวจ';S={team:t,who:$('members').value.trim(),mode,res:[[],[],[],[],[]],pass:[0,0,0,0,0],hints:[2,2,2,2,2]};showMap()}
+const pts=q=>q.pt||ST[q.s].max/Q.filter(x=>x.s===q.s).length;
+const sc=k=>S.res[k].reduce((a,r)=>a+r.e,0);
+const total=()=>ST.reduce((a,_,k)=>a+sc(k),0);
+function showMap(){const n=S.pass.slice(0,4).filter(Boolean).length;
+$('hud').innerHTML=`<span>👥 ${S.team}</span><span>⭐ ${total().toFixed(1)}/100</span><span>🧩 ${n}/4</span>`;
+$('isl').innerHTML=ST.map((s,k)=>{const lock=k===4?n<4:(k>0&&!S.pass[k-1]);const cls=lock?'lock':S.pass[k]?'ok':'';
+return `<button class="isl ${cls}" ${lock?'disabled':''} onclick="startStage(${k})"><b>${s.i}</b><span><b>${k<4?'ด่านที่ '+(k+1):'FINAL BOSS'}: ${s.n}</b><br>${lock?'🔒 ล็อก':S.pass[k]?'✅ ผ่านแล้ว '+sc(k).toFixed(1)+'/'+s.max:'พร้อมเล่น (ผ่าน ≥70%)'}</span></button>`}).join('');go('map')}
+let C;
+function startStage(k){S.res[k]=[];C={k,qs:Q.filter(q=>q.s===k).map(q=>({...q})),i:0,att:0,done:false,pick:null};if(k<4)C.qs.sort(()=>Math.random()-.5);S.hints[k]=2;go('quiz');showQ()}
+function showQ(){const q=C.qs[C.i];C.att=0;C.done=false;C.pick=null;
+if(!q.type&&!q.sh)q.sh=[...q.o].sort(()=>Math.random()-.5);
+$('qhud').innerHTML=`<span>${ST[C.k].i} ${ST[C.k].n}</span><span>ข้อ ${C.i+1}/${C.qs.length}</span><span>⭐ ${total().toFixed(1)}</span><span>💡 ${S.hints[C.k]}</span>`;
+$('qbar').style.width=(C.i/C.qs.length*100)+'%';$('fb').innerHTML='';
+let body=`<div class="note">${q.id} · ระดับ${q.d} · ${pts(q)} คะแนน</div><p><b>🤖 ${q.q}</b></p>`;
+if(q.type==='grid'){const L=[40,30,20,10,0],O=[80,90,100,110,120];
+body+='<table class="g"><tr><td></td>'+O.map(o=>`<td class="ax">${o}°E</td>`).join('')+'</tr>'+L.map(l=>`<tr><td class="ax">${l}°N</td>`+O.map(o=>`<td><button class="cell" id="c${l}_${o}" onclick="pick('${l},${o}')">●</button></td>`).join('')+'</tr>').join('')+'</table>'}
+else body+=q.sh.map((o,j)=>`<button class="opt" data-v="${j}" onclick="pick(${j})">${o}</button>`).join('');
+$('qbox').innerHTML=body;
+$('qbtns').innerHTML=`<button class="btn" id="sub" onclick="submit()">ส่งคำตอบ</button><button class="btn alt" id="hbtn" onclick="hint()">💡 ขอคำใบ้</button><button class="btn alt" onclick="showMap()">กลับแผนที่</button>`}
+function pick(v){if(C.done)return;const q=C.qs[C.i];
+if(q.type==='grid'){document.querySelectorAll('.cell').forEach(c=>c.classList.remove('sel'));C.pick=v;document.getElementById('c'+v.replace(',','_')).classList.add('sel')}
+else{C.pick=q.sh[v];document.querySelectorAll('.opt').forEach(b=>b.classList.toggle('sel',+b.dataset.v===v))}}
+function hint(){if(C.done)return;if(!S.hints[C.k]){$('fb').innerHTML='<div class="fb hint">คำใบ้ของด่านนี้หมดแล้ว</div>';return}S.hints[C.k]--;$('fb').innerHTML=`<div class="fb hint">🤖 แมปปี้: ${C.qs[C.i].h}</div>`;$('qhud').children[3].textContent='💡 '+S.hints[C.k]}
+function submit(){if(C.done)return;const q=C.qs[C.i];if(C.pick===null){$('fb').innerHTML='<div class="fb hint">โปรดเลือกคำตอบก่อนส่ง</div>';return}
+C.att++;
+if(C.pick===q.a){C.done=true;const e=C.att===1?pts(q):pts(q)/2;S.res[C.k].push({e,ok:true});beep(880,.2);
+$('fb').innerHTML=`<div class="fb good">🎉 เยี่ยมมาก! ได้ ${e} คะแนน<br>${q.e}</div>`;next()}
+else if(C.att<2){beep(220,.25);$('fb').innerHTML=`<div class="fb bad">❌ ยังไม่ถูก ลองอีกครั้ง<br>💡 คำใบ้: ${q.h}</div>`;C.pick=null;document.querySelectorAll('.opt,.cell').forEach(b=>b.classList.remove('sel'))}
+else{C.done=true;S.res[C.k].push({e:0,ok:false});beep(220,.4);$('fb').innerHTML=`<div class="fb bad">โอกาสหมดแล้ว<br>✅ เฉลย: <b>${q.type==='grid'?q.a.replace(',','°N, ')+'°E':q.a}</b><br>${q.e}</div>`;next()}}
+function next(){$('sub').disabled=true;$('hbtn').disabled=true;const last=C.i===C.qs.length-1;
+$('qbtns').insertAdjacentHTML('afterbegin',`<button class="btn" onclick="${last?'endStage()':'C.i++;showQ()'}">${last?'ดูผลด่าน':'ข้อถัดไป ➡️'}</button>`)}
+function endStage(){const k=C.k,s=sc(k),m=ST[k].max,p=s>=m*.7;S.pass[k]=p?1:0;beep(p?1046:300,.4);
+$('sdbox').innerHTML=`<h2>${p?'🎉 ผ่านด่าน!':'ยังไม่ผ่านเกณฑ์ 70%'}</h2><div class="chest">${p?(k<4?'🧩':'💰'):'🔁'}</div><p>คะแนน ${s.toFixed(1)}/${m} (${Math.round(s/m*100)}%)</p>${p?(k<4?`<p>ได้รับชิ้นส่วนแผนที่หมายเลข ${k+1}!${k===3?' ประตูสู่ขุมทรัพย์เปิดแล้ว':''}</p>`:''):'<p>ลองเล่นด่านนี้ใหม่เพื่อเพิ่มคะแนน</p>'}${p&&k===4?'<button class="btn" onclick="final()">เปิดหีบสมบัติ</button>':'<button class="btn" onclick="showMap()">กลับแผนที่</button>'}${!p||k<4?`<button class="btn alt" onclick="startStage(${k})">เล่นด่านนี้ใหม่</button>`:''}`;go('stagedone')}
+function final(){const t=total(),g=t>=90?'นักสำรวจระดับปรมาจารย์':t>=80?'นักวิเคราะห์แผนที่ยอดเยี่ยม':t>=70?'นักสำรวจผู้เชี่ยวชาญ':t>=50?'นักสำรวจฝึกหัดที่กำลังพัฒนา':'ผู้เริ่มต้นผจญภัย ควรฝึกฝนเพิ่มเติม';
+let ok=0,bad=0;S.res.forEach(r=>r.forEach(x=>x.ok?ok++:bad++));
+const pc=ST.map((s,k)=>sc(k)/s.max);const str=ST.filter((s,k)=>pc[k]>=.8).map(s=>s.n),rev=ST.filter((s,k)=>pc[k]<.8).map(s=>s.n);
+$('rbox').innerHTML=`<h2>🏆 MASTER GEOGRAPHER</h2><div class="chest">💰</div><div style="font-size:2rem">🪙✨🪙✨🪙</div><h1>${S.team}</h1>${S.who?`<p>${S.who}</p>`:''}<h2>${t.toFixed(1)} / 100</h2><p>ระดับ: <b>${g}</b></p><div class="card">${ST.map((s,k)=>`<div class="row"><span>${s.i} ${s.n}</span><b>${sc(k).toFixed(1)}/${s.max}</b></div>`).join('')}<div class="row"><span>✅ ถูก / ❌ ผิด (ไม่ได้คะแนน)</span><b>${ok} / ${bad}</b></div></div><div class="card"><b>จุดแข็ง:</b> ${str.join(', ')||'ยังไม่มีด่านที่ได้ ≥80% — ฝึกต่อได้เลย'}<br><b>ควรทบทวน:</b> ${rev.join(', ')||'ไม่มี เยี่ยมมาก!'}<br><b>คำแนะนำ:</b> ${rev.length?'กลับไปเล่นด่านที่ควรทบทวนซ้ำเพื่อเพิ่มคะแนน':'ลองสร้างโจทย์พิกัดให้เพื่อนตอบ'}</div><button class="btn" onclick="startGame()">เล่นซ้ำ</button><button class="btn alt" onclick="go('home')">กลับสู่หน้าหลัก</button>`;beep(1318,.5);go('result')}
+</script></body></html>
